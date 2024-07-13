@@ -13,37 +13,43 @@ class GroceryList extends StatefulWidget {
 }
 
 class _GroceryListState extends State<GroceryList> {
-  void _addItem() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => NewItem()));
+  final List<GroceryItem> _groceryItmes = [];
+  void _addItem() async {
+    final newItem = await Navigator.of(context)
+        .push<GroceryItem>(MaterialPageRoute(builder: (ctx) => NewItem()));
+  if(newItem == null){
+    return;
   }
- 
+  setState(() {
+  _groceryItmes.add(newItem);
+   
+  });
+   }
+
   @override
   Widget build(BuildContext context) {
-    
-    return  Scaffold(
-            appBar: AppBar(
-              title: const Text("Your Groceries"),
-              actions: [
-                IconButton(
-                    onPressed: () => _addItem(), icon: const Icon(Icons.add))
-              ],
-            ),
-            body: ListView.builder(
-      itemCount: groceryItems.length,
-      itemBuilder: (ctx, index){
-        final item = groceryItems[index];
-        return ListTile(  
-        title: Text(item.name),
-        leading: Container(
-          width: 24,
-          height: 24,
-          color: item.category.color,
-        ),
-        trailing:Text(item.quantity.toString()) ,
-      );
-      }    
-    ),
-          );
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Your Groceries"),
+        actions: [
+          IconButton(onPressed: () => _addItem(), icon: const Icon(Icons.add))
+        ],
+      ),
+      body: ListView.builder(
+          itemCount: _groceryItmes.length,
+          itemBuilder: (ctx, index) {
+            final item = _groceryItmes[index];
+            return ListTile(
+              title: Text(item.name),
+              leading: Container(
+                width: 24,
+                height: 24,
+                color: item.category.color,
+              ),
+              trailing: Text(item.quantity.toString()),
+            );
+          }),
+    );
     //My solution:::
     // return ListView.builder(
     //   itemCount: groceryItems.length,
