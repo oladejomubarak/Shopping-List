@@ -3,6 +3,7 @@ import 'package:shopping_list/models/grocery_item.dart';
 import 'package:shopping_list/models/category.dart';
 import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/data/dummy_items.dart';
+import 'package:shopping_list/widgets/all_groceries.dart';
 import 'package:shopping_list/widgets/new_item.dart';
 
 class GroceryList extends StatefulWidget {
@@ -25,9 +26,33 @@ class _GroceryListState extends State<GroceryList> {
    
   });
    }
-
+  void _removeItem(GroceryItem groceryItem) {
+    final itemIndex = _groceryItmes.indexOf(groceryItem);
+    setState(() {
+      _groceryItmes.remove(groceryItem);
+    });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      duration: const Duration(seconds: 3),
+      content: const Text("Expense deleted successfully!"),
+      action: SnackBarAction(
+        label: "undo",
+        onPressed: () {
+          setState(() {
+            _groceryItmes.insert(itemIndex, groceryItem);
+          });
+        },
+      ),
+    ));
+  }
   @override
   Widget build(BuildContext context) {
+     Widget mainContent = const Center(
+      child: Text("No Item Available, start adding them by tapping the add icon above!"),
+    );
+    if(_groceryItmes.isNotEmpty){
+      mainContent = AllGroceries(groceryItmes: _groceryItmes, onRemoveItem: _removeItem,);
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Groceries"),
@@ -35,21 +60,7 @@ class _GroceryListState extends State<GroceryList> {
           IconButton(onPressed: () => _addItem(), icon: const Icon(Icons.add))
         ],
       ),
-      body: ListView.builder(
-          itemCount: _groceryItmes.length,
-          itemBuilder: (ctx, index) {
-            final item = _groceryItmes[index];
-            return ListTile(
-              title: Text(item.name),
-              leading: Container(
-                width: 24,
-                height: 24,
-                color: item.category.color,
-              ),
-              trailing: Text(item.quantity.toString()),
-            );
-          }),
-    );
+      body:  mainContent);
     //My solution:::
     // return ListView.builder(
     //   itemCount: groceryItems.length,
