@@ -34,9 +34,11 @@ class _GroceryListState extends State<GroceryList> {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       duration: const Duration(seconds: 3),
+      backgroundColor: Colors.red,
       content: const Text("Expense deleted successfully!"),
       action: SnackBarAction(
         label: "undo",
+        backgroundColor: Colors.green,
         onPressed: () {
           setState(() {
             _groceryItmes.insert(itemIndex, groceryItem);

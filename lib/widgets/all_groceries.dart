@@ -1,18 +1,24 @@
-
 import 'package:flutter/material.dart';
 import 'package:shopping_list/models/grocery_item.dart';
 
-class AllGroceries extends StatelessWidget{
-const AllGroceries({super.key, required this.groceryItmes, required this.onRemoveItem});
-final List<GroceryItem> groceryItmes;
-final void Function(GroceryItem groceItem) onRemoveItem;
+class AllGroceries extends StatelessWidget {
+  const AllGroceries(
+      {super.key, required this.groceryItmes, required this.onRemoveItem});
+  final List<GroceryItem> groceryItmes;
+  final void Function(GroceryItem groceItem) onRemoveItem;
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-          itemCount: groceryItmes.length,
-          itemBuilder: (ctx, index) {
-            final item = groceryItmes[index];
-            return ListTile(
+        itemCount: groceryItmes.length,
+        itemBuilder: (ctx, index) {
+          final item = groceryItmes[index];
+          return Dismissible(
+            onDismissed: (direction){
+              onRemoveItem(item);
+            },
+            key: ValueKey(item.id),
+            child: ListTile(
               title: Text(item.name),
               leading: Container(
                 width: 24,
@@ -20,7 +26,8 @@ final void Function(GroceryItem groceItem) onRemoveItem;
                 color: item.category.color,
               ),
               trailing: Text(item.quantity.toString()),
-            );
-          });
+            ),
+          );
+        });
   }
 }
