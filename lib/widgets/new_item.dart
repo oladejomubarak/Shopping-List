@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/models/category.dart';
 import 'package:shopping_list/models/grocery_item.dart';
+import 'package:http/http.dart' as http;
 
 class NewItem extends StatefulWidget {
   @override
@@ -24,9 +25,7 @@ class _NewItemState extends State<NewItem> {
           name: _enteredName,
           quantity: _enteredQuantity,
           category: _selectedCategory,),);
-      // print(_enteredName);
-      // print(_enteredQuantity);
-      // print(_selectedCategory);
+  
     }
   }
 
